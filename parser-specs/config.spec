@@ -545,6 +545,8 @@ state BAR:
   'binding_mode_indicator' -> BAR_BINDING_MODE_INDICATOR
   'workspace_buttons'      -> BAR_WORKSPACE_BUTTONS
   'workspace_min_width'    -> BAR_WORKSPACE_MIN_WIDTH
+  'unhide_width'           -> BAR_UNHIDE_WIDTH
+  'unhide_left_margin'     -> BAR_UNHIDE_LEFT_MARGIN
   'strip_workspace_numbers' -> BAR_STRIP_WORKSPACE_NUMBERS
   'strip_workspace_name' -> BAR_STRIP_WORKSPACE_NAME
   'verbose'                -> BAR_VERBOSE
@@ -660,6 +662,14 @@ state BAR_WORKSPACE_MIN_WIDTH_PX:
       ->
   end
       -> call cfg_bar_workspace_min_width(&width); BAR
+
+state BAR_UNHIDE_WIDTH:
+value = number
+      -> call cfg_bar_unhide_width(&value); BAR
+
+state BAR_UNHIDE_LEFT_MARGIN:
+value = number
+      -> call cfg_bar_unhide_left_margin(&value); BAR
 
 state BAR_STRIP_WORKSPACE_NUMBERS:
   value = word

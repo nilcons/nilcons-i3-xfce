@@ -382,6 +382,18 @@ static int config_integer_cb(void *params_, long long val) {
         return 1;
     }
 
+    if (!strcmp(cur_key, "unhide_width")) {
+        DLOG("unhide_width = %lld\n", val);
+        config.unhide_width = val;
+        return 1;
+    }
+
+    if (!strcmp(cur_key, "unhide_left_margin")) {
+        DLOG("unhide_left_margin = %lld\n", val);
+        config.unhide_left_margin = val;
+        return 1;
+    }
+
     return 0;
 }
 

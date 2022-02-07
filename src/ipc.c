@@ -847,6 +847,12 @@ static void dump_bar_config(yajl_gen gen, Barconfig *config) {
     ystr("workspace_min_width");
     y(integer, config->workspace_min_width);
 
+    ystr("unhide_width");
+    y(integer, config->unhide_width);
+
+    ystr("unhide_left_margin");
+    y(integer, config->unhide_left_margin);
+
     ystr("strip_workspace_numbers");
     y(bool, config->strip_workspace_numbers);
 

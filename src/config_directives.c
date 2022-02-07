@@ -885,6 +885,14 @@ CFGFUN(bar_workspace_min_width, const long width) {
     current_bar->workspace_min_width = width;
 }
 
+CFGFUN(bar_unhide_width, const long width) {
+    current_bar->unhide_width = width;
+}
+
+CFGFUN(bar_unhide_left_margin, const long margin) {
+    current_bar->unhide_left_margin = margin;
+}
+
 CFGFUN(bar_strip_workspace_numbers, const char *value) {
     current_bar->strip_workspace_numbers = boolstr(value);
 }

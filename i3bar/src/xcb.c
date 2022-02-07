@@ -362,12 +362,12 @@ static void unhide_bars(void) {
                XCB_CONFIG_WINDOW_WIDTH |
                XCB_CONFIG_WINDOW_HEIGHT |
                XCB_CONFIG_WINDOW_STACK_MODE;
-        values[0] = walk->rect.x;
+        values[0] = walk->rect.x + config.unhide_left_margin;
         if (config.position == POS_TOP)
             values[1] = walk->rect.y;
         else
             values[1] = walk->rect.y + walk->rect.h - bar_height;
-        values[2] = walk->rect.w;
+        values[2] = config.unhide_width > 0 ? config.unhide_width : walk->rect.w;
         values[3] = bar_height;
         values[4] = XCB_STACK_MODE_ABOVE;
         DLOG("Reconfiguring window for output %s to %d,%d\n", walk->name, values[0], values[1]);
