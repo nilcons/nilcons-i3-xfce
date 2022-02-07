@@ -337,6 +337,11 @@ struct Barconfig {
     /** The minimal width for workspace buttons. */
     int workspace_min_width;
 
+    /** Extra margin and max length, useful to put this panel on top
+     * of other desktop provided panels. */
+    int unhide_width;
+    int unhide_left_margin;
+
     /** Strip workspace numbers? Configuration option is
      * 'strip_workspace_numbers yes'. */
     bool strip_workspace_numbers;

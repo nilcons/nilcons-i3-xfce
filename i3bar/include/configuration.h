@@ -48,6 +48,8 @@ typedef struct config_t {
     bool disable_binding_mode_indicator;
     bool disable_ws;
     int ws_min_width;
+    int unhide_width;
+    int unhide_left_margin;
     bool strip_ws_numbers;
     bool strip_ws_name;
     char *bar_id;
