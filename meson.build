@@ -501,6 +501,17 @@ meson.add_install_script(
 )
 
 executable(
+  'sm',
+  [
+    'sm/sm.c'
+  ],
+  dependencies:
+  [
+    dependency('sm', method: 'pkg-config')
+  ],
+)
+
+executable(
   'i3bar',
   [
     'i3bar/src/child.c',
