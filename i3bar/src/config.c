@@ -21,6 +21,9 @@ static bool parsing_bindings;
 static bool parsing_tray_outputs;
 static bool parsing_padding;
 
+extern int unhide_width_from_cmdline;
+extern int unhide_left_margin_from_cmdline;
+
 /*
  * Parse a key.
  *
@@ -422,6 +425,8 @@ void parse_config_json(char *json) {
     /* FIXME: Proper error handling for JSON parsing */
     switch (state) {
         case yajl_status_ok:
+            config.unhide_width = unhide_width_from_cmdline == -1 ? config.unhide_width : unhide_width_from_cmdline;
+            config.unhide_left_margin = unhide_left_margin_from_cmdline == -1 ? config.unhide_left_margin : unhide_left_margin_from_cmdline;
             break;
         case yajl_status_client_canceled:
         case yajl_status_error:
