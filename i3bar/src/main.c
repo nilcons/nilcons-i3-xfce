@@ -17,6 +17,9 @@
 
 struct ev_loop *main_loop;
 
+int unhide_width_from_cmdline = -1;
+int unhide_left_margin_from_cmdline = -1;
+
 /*
  * Having verboselog(), errorlog() and debuglog() is necessary when using libi3.
  *
@@ -64,6 +67,9 @@ static void print_usage(char *elf_name) {
     printf("-h, --help         Display this help message and exit\n");
     printf("-v, --version      Display version number and exit\n");
     printf("-V, --verbose      Enable verbose mode\n");
+    printf("-V, --verbose      Enable verbose mode\n");
+    printf("-w, --width        <int>\tWidth of the bar in hide mode\n");
+    printf("-m, --left_margin  <int>\tLeft margin of the bar in hide mode\n");
     printf("\n");
     printf(" PLEASE NOTE that i3bar will be automatically started by i3\n"
            " as soon as there is a 'bar' configuration block in your\n"
@@ -104,11 +110,13 @@ int main(int argc, char **argv) {
         {"help", no_argument, 0, 'h'},
         {"version", no_argument, 0, 'v'},
         {"verbose", no_argument, 0, 'V'},
+        {"width", required_argument, 0, 'w'},
+        {"left_margin", required_argument, 0, 'm'},
         {NULL, 0, 0, 0}};
 
     int opt;
     int option_index = 0;
-    while ((opt = getopt_long(argc, argv, "b:s:thvV", long_opt, &option_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "b:s:thvVw:m:", long_opt, &option_index)) != -1) {
         switch (opt) {
             case 's':
                 socket_path = expand_path(optarg);
@@ -125,6 +133,12 @@ int main(int argc, char **argv) {
                 break;
             case 'V':
                 config.verbose = true;
+                break;
+            case 'w':
+                unhide_width_from_cmdline = atoi(optarg);
+                break;
+            case 'm':
+                unhide_left_margin_from_cmdline = atoi(optarg);
                 break;
             default:
                 print_usage(argv[0]);
