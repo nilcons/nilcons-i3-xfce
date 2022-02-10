@@ -197,7 +197,9 @@ static int outputs_end_map_cb(void *params_) {
         for (int c = 0; c < config.num_outputs; c++) {
             if ((strcasecmp(params->outputs_walk->name, config.outputs[c]) == 0) ||
                 (strcasecmp(config.outputs[c], "primary") == 0 && is_primary) ||
-                (strcasecmp(config.outputs[c], "nonprimary") == 0 && !is_primary)) {
+                (strcasecmp(config.outputs[c], "nonprimary") == 0
+                 && !is_primary
+                 && strcasecmp(params->outputs_walk->name, "xroot-0") != 0)) {
                 handle_output = true;
                 break;
             }

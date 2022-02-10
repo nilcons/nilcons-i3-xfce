@@ -180,6 +180,48 @@ static bool strings_differ(char *a, char *b) {
 }
 
 /*
+ * Called, when a window_update event arrives (i.e. on fullscreen we
+ * want to hide ourselves).
+ *
+ * This is necessary for our xfce panel hacks, so when a window goes
+ * fullscreen, we hide ourselves.  The i3 WM can't do this for us,
+ * because we are running in override_redirect mode ("mode hide" in
+ * ~/.i3/config), so i3 has no knowledge of us at all.
+ */
+static void got_window_event(char *event) {
+  i3_output *o_walk = SLIST_FIRST(outputs);
+  char *expected_output;
+  sasprintf(&expected_output, "\"output\":\"%s\"", o_walk->name);
+  char *found_id = strstr(event, expected_output);
+  FREE(expected_output);
+
+  o_walk = SLIST_NEXT(o_walk, slist);
+  if (o_walk != NULL) {
+    fprintf(stderr, "This hacked i3bar should only be used on one output at a time: %s\n", o_walk->name);
+    return;
+  }
+
+  if (!found_id) return; // not our output to handle, hopefully another bar is running for it
+
+  // if the incoming event is about changing fullscreen status or
+  // changing focus (i.e. changing workspaces), then check for the
+  // current window being full-screen
+  char expected_fs[] = "\"change\":\"fullscreen_mode\"";
+  char expected_focus[] = "\"change\":\"focus\"";
+  if (strstr(event, expected_fs) || strstr(event, expected_focus)) {
+    char expected_on[] = "\"fullscreen_mode\":1";
+    if (strstr(event, expected_on)) {
+      // fullscreen is on, hide ourselves
+      config.hidden_state = S_HIDE;
+    } else {
+      // fullscreen is off, show ourselves
+      config.hidden_state = S_SHOW;
+    }
+    draw_bars(false);
+  }
+}
+
+/*
  * Called, when a barconfig_update event arrives (i.e. i3 changed the bar hidden_state or mode)
  *
  */
@@ -229,7 +271,7 @@ handler_t event_handlers[] = {
     &got_workspace_event,
     &got_output_event,
     &got_mode_event,
-    NULL,
+    &got_window_event,
     &got_bar_config_update,
 };
 
@@ -377,8 +419,8 @@ void destroy_connection(void) {
  */
 void subscribe_events(void) {
     if (config.disable_ws) {
-        i3_send_msg(I3_IPC_MESSAGE_TYPE_SUBSCRIBE, "[ \"output\", \"mode\", \"barconfig_update\" ]");
+        i3_send_msg(I3_IPC_MESSAGE_TYPE_SUBSCRIBE, "[ \"output\", \"mode\", \"barconfig_update\", \"window\" ]");
     } else {
-        i3_send_msg(I3_IPC_MESSAGE_TYPE_SUBSCRIBE, "[ \"workspace\", \"output\", \"mode\", \"barconfig_update\" ]");
+        i3_send_msg(I3_IPC_MESSAGE_TYPE_SUBSCRIBE, "[ \"workspace\", \"output\", \"mode\", \"barconfig_update\", \"window\" ]");
     }
 }
